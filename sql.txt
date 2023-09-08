@@ -1,0 +1,65 @@
+CREATE DATABASE OnlineBankdb;
+
+
+USE OnlineBankdb
+
+CREATE TABLE USER(
+uid INT PRIMARY KEY AUTO_INCREMENT,
+email VARCHAR(100),
+password VARCHAR(100),
+admin BOOLEAN DEFAULT 0
+);
+
+CREATE TABLE user_details(
+	udid INT PRIMARY KEY AUTO_INCREMENT,
+	NAME VARCHAR(100) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	fname VARCHAR(100) NOT NULL,
+	mname VARCHAR(100) NOT NULL,
+	aadhar BIGINT NOT NULL,
+	dob DATE NOT NULL,
+	phone BIGINT NOT NULL,
+	address VARCHAR(500) NOT NULL,
+	pincode INT NOT NULL,
+	mailing VARCHAR(500) NOT NULL,
+	income VARCHAR(10) NOT NULL, 
+	occupation VARCHAR(15) NOT NULL
+);
+
+
+CREATE TABLE ACCOUNT(
+aid INT PRIMARY KEY,
+atype VARCHAR(100),
+onlineflag BOOLEAN DEFAULT 0,
+holdername VARCHAR(100),
+status VARCHAR(10) NOT NULL CHECK(STATUS IN('active','disabled','processing')),
+balance bigint,
+uid INT,
+user_details_id INT,
+constraint acc_pku foreign key(user_details_id) references user_details(udid),
+CONSTRAINT acc_pk FOREIGN KEY(uid) REFERENCES user(uid)
+);
+ 
+ 
+ 
+ 
+CREATE TABLE TRANSACTION (
+	tid INT PRIMARY KEY AUTO_INCREMENT,
+	amount DOUBLE NOT null,
+	status VARCHAR(10) NOT NULL CHECK(STATUS IN('success','failed','processing')),
+	type VARCHAR(10) NOT NULL CHECK(STATUS IN('neft', 'imps', 'rtgs')),
+	remark TEXT,
+	said INT NOT NULL,
+	raid INT NOT NULL,
+	
+	CONSTRAINT trs_pk1 FOREIGN KEY(said) REFERENCES ACCOUNT(aid),
+	CONSTRAINT trs_pk2 FOREIGN KEY(raid) REFERENCES ACCOUNT(aid)
+);
+
+
+
+
+
+
+
+
